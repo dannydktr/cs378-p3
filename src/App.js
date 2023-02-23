@@ -6,7 +6,24 @@ export default function App() {
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
 
-  const [buttonNames, setButtonNames] = useState([]);
+  const [buttonNames, setButtonNames] = useState([(
+    <button onClick={() => fetchAPIData('https://api.open-meteo.com/v1/forecast?latitude=' + 10 + '&longitude=' + 10 + '&hourly=temperature_2m')}>
+      Longitude: {10}
+      Latitude: {10}
+    </button>
+  ), (
+    <button onClick={() => fetchAPIData('https://api.open-meteo.com/v1/forecast?latitude=' + 20 + '&longitude=' + 20 + '&hourly=temperature_2m')}>
+      Longitude: {20}
+      Latitude: {20}
+    </button>
+  ),
+  (
+    <button onClick={() => fetchAPIData('https://api.open-meteo.com/v1/forecast?latitude=' + 30 + '&longitude=' + 30 + '&hourly=temperature_2m')}>
+      Longitude: {30}
+      Latitude: {30}
+    </button>
+  )
+  ]);
 
   const handleButtonClick = (longitude, latitude) => {
     const newButton = (
@@ -16,6 +33,10 @@ export default function App() {
       </button>
     );
     setButtonNames([...buttonNames, newButton]);
+  }
+
+  function handleDislay() {
+
   }
 
 
