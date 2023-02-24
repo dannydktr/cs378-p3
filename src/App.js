@@ -35,7 +35,7 @@ export default function App() {
   ]);
 
   const handleButtonClick = (longitude, latitude, name) => {
-    if(isNaN(+longitude) || isNaN(+latitude)) {
+    if (isNaN(+longitude) || isNaN(+latitude)) {
       setErrorMessage("Invalid Input. Only Enter Numbers for Longitude and Latitude.");
       return;
     } else if (longitude === "" || latitude === "" || name === "") {
@@ -55,9 +55,25 @@ export default function App() {
 
   function handleDislay(latitude, longitude) {
     const json_info = fetchAPIData('https://api.open-meteo.com/v1/forecast?latitude=' + latitude + '&longitude=' + longitude + '&hourly=temperature_2m');
+    
+    
     json_info.then(function (json) {
-      console.log(json)
-      setWeatherInfo(json.hourly.time);
+      console.log(json);
+      json.hourly.time.slice(0,12);
+      json.hourly.temperature_2m.slice(0, 12);
+      setWeatherInfo(
+        
+
+
+
+        json.hourly.time.map((time, index) => (
+          <tr key={time}>
+            <td>{new Date(time).toLocaleTimeString()}</td>
+            <td>{json.hourly.temperature_2m[index]}</td>
+          </tr>
+        ))
+
+      );
     });
   }
 
@@ -81,11 +97,12 @@ export default function App() {
       </div>
       <div>
         <button onClick={() => handleButtonClick(longitude, latitude, name)}>Add New Location</button>
+        {errorMessage && (
+          <p className="error"> {errorMessage} </p>
+        )}
       </div>
 
-      {errorMessage && (
-        <p className="error"> {errorMessage} </p>
-      )}
+
 
       <div>
         {buttonNames}
