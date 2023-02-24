@@ -95,7 +95,7 @@ export default function App() {
         Weather Infomation
       </h1>
       <div>
-        <label>Name of Location</label>
+        <label>Label for Location</label>
         <input type="text" value={name} onChange={(e) => setName(e.target.value)}></input>
       </div>
       <div>
