@@ -1,5 +1,6 @@
 import './App.css';
 import React, { useState } from 'react';
+import { useEffect } from 'react';
 
 
 
@@ -14,22 +15,18 @@ export default function App() {
 
 
   const [buttonNames, setButtonNames] = useState([(
-    <button key={0} onClick={() => handleDislay(10, 10)}>
-      Longitude: {10}
-      Latitude: {10}
+    <button key={0} onClick={() => handleDisplay(30.27, -97.74)}>
+      Austin, TX
     </button>
   ), (
-    <button key={1} onClick={() => handleDislay(20, 20)}>
-      Longitude: {20}
-      Latitude: {20}
+    <button key={1} onClick={() => handleDisplay(29.76, -95.36)}>
+      Houston, TX
     </button>
 
   ),
   (
-
-    <button key={2} onClick={() => handleDislay(30, 30)}>
-      Longitude: {30}
-      Latitude: {30}
+    <button key={2} onClick={() => handleDisplay(40.71, -74.01)}>
+      New York, NY
     </button>
   )
   ]);
@@ -45,37 +42,51 @@ export default function App() {
     else {
       setErrorMessage("");
     }
+    handleDisplay(latitude, longitude);
     const newButton = (
-      <button key={buttonNames.length} onClick={() => handleDislay(latitude, longitude)}>
+      <button key={buttonNames.length} onClick={() => handleDisplay(latitude, longitude)}>
         {name}
       </button>
     );
     setButtonNames([...buttonNames, newButton]);
   }
 
-  function handleDislay(latitude, longitude) {
+  function handleDisplay(latitude, longitude) {
     const json_info = fetchAPIData('https://api.open-meteo.com/v1/forecast?latitude=' + latitude + '&longitude=' + longitude + '&hourly=temperature_2m');
-    
-    
+
+
     json_info.then(function (json) {
       console.log(json);
-      json.hourly.time.slice(0,12);
+      json.hourly.time.slice(0, 12);
       json.hourly.temperature_2m.slice(0, 12);
       setWeatherInfo(
-        
-
-
-
-        json.hourly.time.map((time, index) => (
-          <tr key={time}>
-            <td>{new Date(time).toLocaleTimeString()}</td>
-            <td>{json.hourly.temperature_2m[index]}</td>
-          </tr>
-        ))
-
+        <div>
+          <h2>Hourly Weather Data</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>Temperature (°C)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {json.hourly.time.map((time, index) => (
+                <tr key={time}>
+                  <td>{new Date(time).toLocaleTimeString()}</td>
+                  <td>{json.hourly.temperature_2m[index]}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       );
     });
   }
+
+  useEffect(() => {
+    handleDisplay(30.27, -97.74);
+  }
+    , []);
 
 
   return (
@@ -101,9 +112,6 @@ export default function App() {
           <p className="error"> {errorMessage} </p>
         )}
       </div>
-
-
-
       <div>
         {buttonNames}
       </div>
@@ -112,6 +120,7 @@ export default function App() {
       </div>
     </div>
   );
+  
 }
 
 async function fetchAPIData(url) {
