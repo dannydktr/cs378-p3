@@ -92,7 +92,7 @@ export default function App() {
   return (
     <div>
       <h1>
-        Weather Infomation
+        Weather Information
       </h1>
       <div>
         <label>Label for Location</label>
