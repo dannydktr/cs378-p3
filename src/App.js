@@ -73,7 +73,7 @@ export default function App() {
               {json.hourly.time.map((time, index) => (
                 <tr key={time}>
                   <td>{new Date(time).toLocaleTimeString()}</td>
-                  <td>{json.hourly.temperature_2m[index]}</td>
+                  <td>{json.hourly.temperature_2m[index]} C </td>
                 </tr>
               ))}
             </tbody>
